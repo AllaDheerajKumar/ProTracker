@@ -1,0 +1,78 @@
+# cloud/docker-compose.yml
+version: "3.9"
+
+services:
+  api:
+    build:
+      context: ..           # project root (so Dockerfile can see requirements.txt)
+      dockerfile: cloud/docker/backend.Dockerfile
+    container_name: prodactive_api
+    env_file:
+      - ../.env.example
+    working_dir: /app
+    volumes:
+      - ../backend/app:/app/app:cached   # live-reload in dev
+    ports:
+      - "${API_PORT:-8000}:8000"
+    depends_on:
+      - db
+      - redis
+      - mailhog
+
+  worker:
+    build:
+      context: ..
+      dockerfile: cloud/docker/worker.Dockerfile
+    container_name: prodactive_worker
+    env_file:
+      - ../.env.example
+    working_dir: /app
+    volumes:
+      - ../backend/app:/app/app:cached
+    depends_on:
+      - db
+      - redis
+      - mailhog
+
+  frontend:
+    build:
+      context: ..
+      dockerfile: cloud/docker/frontend.Dockerfile
+    container_name: prodactive_frontend
+    working_dir: /web
+    volumes:
+      - ../frontend:/web:cached
+    environment:
+      - VITE_API_URL=http://localhost:${API_PORT:-8000}
+    ports:
+      - "5173:5173"
+    depends_on:
+      - api
+
+  db:
+    image: postgres:16
+    container_name: prodactive_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: prodactive
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+    container_name: prodactive_redis
+    ports:
+      - "6379:6379"
+
+  mailhog:
+    image: mailhog/mailhog
+    container_name: prodactive_mailhog
+    ports:
+      - "8025:8025"   # UI
+      - "1025:1025"   # SMTP
+
+volumes:
+  pgdata:
