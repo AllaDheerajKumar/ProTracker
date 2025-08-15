@@ -1,0 +1,34 @@
+version: "3.9"
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    container_name: prodactive_api
+    working_dir: /app
+    environment:
+      # Update if you change DB creds or name
+      DATABASE_URL: postgresql+asyncpg://postgres:postgres@db:5432/prodactive
+      API_PORT: "8000"
+    volumes:
+      - ./backend/app:/app/app:cached   # mounts your FastAPI code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+  db:
+    image: postgres:16
+    container_name: prodactive_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: prodactive
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
