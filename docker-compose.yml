@@ -1,4 +1,4 @@
-version: "3.9"
+
 
 services:
   api:
@@ -7,10 +7,8 @@ services:
       dockerfile: ./Dockerfile
     container_name: prodactive_api
     working_dir: /app
-    environment:
-      # Update if you change DB creds or name
-      DATABASE_URL: postgresql+asyncpg://postgres:postgres@db:5432/prodactive
-      API_PORT: "8000"
+    env_file:
+      - .env
     volumes:
       - ./backend/app:/app/app:cached   # mounts your FastAPI code
     ports:
