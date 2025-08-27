@@ -1,8 +1,6 @@
 from fastapi import FastAPI
+app = FastAPI(title="Prodactive API")
 
-app = FastAPI()
-
-
-@app.get("/health")
+@app.get("/healthz")
 def health():
     return {"ok": True}
