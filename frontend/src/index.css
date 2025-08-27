@@ -1,0 +1,33 @@
+:root {
+    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    font-weight: 400;
+}
+
+body {
+    margin: 0;
+    min-width: 320px;
+    min-height: 100vh;
+    background-color: #f8f9fa;
+}
+
+.task-card {
+    transition: transform 0.2s ease-in-out;
+}
+
+.task-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.status-todo {
+    background-color: #fff3cd;
+}
+
+.status-in-progress {
+    background-color: #cce5ff;
+}
+
+.status-done {
+    background-color: #d4edda;
+}
