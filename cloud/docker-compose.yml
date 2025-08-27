@@ -4,14 +4,14 @@ version: "3.9"
 services:
   api:
     build:
-      context: ..           # project root (so Dockerfile can see requirements.txt)
+      context: ..           
       dockerfile: cloud/docker/backend.Dockerfile
     container_name: prodactive_api
     env_file:
       - ../.env.example
     working_dir: /app
     volumes:
-      - ../backend/app:/app/app:cached   # live-reload in dev
+      - ../backend/app:/app/app:cached   
     ports:
       - "${API_PORT:-8000}:8000"
     depends_on:

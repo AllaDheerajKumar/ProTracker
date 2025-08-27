@@ -8,11 +8,10 @@ services:
     container_name: prodactive_api
     working_dir: /app
     environment:
-      # Update if you change DB creds or name
       DATABASE_URL: postgresql+asyncpg://postgres:postgres@db:5432/prodactive
       API_PORT: "8000"
     volumes:
-      - ./backend/app:/app/app:cached   # mounts your FastAPI code
+      - ./backend/app:/app/app:cached   
     ports:
       - "8000:8000"
     depends_on:
